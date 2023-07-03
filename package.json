@@ -19,7 +19,11 @@
   "keywords": [
     "web-workers",
     "javascript",
-    "typescript"
+    "typescript",
+    "request-response",
+    "promises",
+    "api",
+    "promise-based"
   ],
   "author": "Levi Gruspe",
   "license": "MIT",
