@@ -1,0 +1,37 @@
+{
+  "name": "@palasimi/workers",
+  "version": "1.0.0",
+  "description": "Promise-based request-response API for dedicated web workers",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc --declaration --declarationMap --sourceMap --lib dom,es2015 --target es2015 --outDir dist src/*.ts",
+    "check": "npm run format && npm run lint && npm run typecheck",
+    "format": "prettier -c .",
+    "format:fix": "prettier -w .",
+    "lint": "eslint src",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "typecheck": "tsc --noEmit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/palasimi/palasimi-workers.git"
+  },
+  "keywords": [
+    "web-workers",
+    "javascript",
+    "typescript"
+  ],
+  "author": "Levi Gruspe",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/palasimi/palasimi-workers/issues"
+  },
+  "homepage": "https://github.com/palasimi/palasimi-workers#readme",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.60.1",
+    "@typescript-eslint/parser": "^5.60.1",
+    "eslint": "^8.44.0",
+    "prettier": "^2.8.8",
+    "typescript": "^5.1.6"
+  }
+}
