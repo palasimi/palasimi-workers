@@ -11,7 +11,7 @@ export enum Status {
   Success,
 }
 
-export function initServer(self: Worker, handlers: ServerHandlers) {
+export function initServer(handlers: ServerHandlers) {
   self.onmessage = (event) => {
     const { id, name, value } = event.data;
     const handler = handlers[name];
