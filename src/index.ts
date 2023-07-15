@@ -11,30 +11,6 @@ export enum Status {
   Success,
 }
 
-export function initServer(handlers: ServerHandlers) {
-  self.onmessage = (event) => {
-    const { id, name, value } = event.data;
-    const handler = handlers[name];
-    if (handler == null) {
-      // Error message.
-      self.postMessage({
-        id,
-        name,
-        status: Status.Fail,
-      });
-      return;
-    }
-
-    // Send result.
-    self.postMessage({
-      id,
-      name,
-      value: handler(value),
-      status: Status.Success,
-    });
-  };
-}
-
 export type Query = {
   name: string;
   value: unknown;
@@ -49,6 +25,46 @@ export type Response = {
 };
 
 export type QueryFunction = (query: Query) => Promise<Response>;
+
+// Evaluate request.
+function evaluate(handlers: ServerHandlers, request: Response): Response {
+  const { id, name, value } = request;
+  const handler = handlers[name];
+  if (handler == null) {
+    const error = new Error(`unknown command: ${name}`);
+    return {
+      id,
+      name,
+      value: error,
+      status: Status.Fail,
+    };
+  }
+
+  try {
+    return {
+      id,
+      name,
+      value: handler(value),
+      status: Status.Success,
+    };
+  } catch (error) {
+    return {
+      id,
+      name,
+      value: error,
+      status: Status.Fail,
+    };
+  }
+}
+
+export function initServer(handlers: ServerHandlers) {
+  self.onmessage = (event) => {
+    const response = evaluate(handlers, event.data);
+
+    // This may throw an exception if the response value can't be cloned.
+    self.postMessage(response);
+  };
+}
 
 export function initClient(
   worker: Worker,
