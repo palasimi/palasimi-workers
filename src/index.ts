@@ -38,6 +38,7 @@ export function initServer(handlers: ServerHandlers) {
 export type Query = {
   name: string;
   value: unknown;
+  pollingCycle?: number;
 };
 
 export type Response = {
@@ -49,7 +50,10 @@ export type Response = {
 
 export type QueryFunction = (query: Query) => Promise<Response>;
 
-export function initClient(worker: Worker, pollingCycle = 50): QueryFunction {
+export function initClient(
+  worker: Worker,
+  defaultPollingCycle = 50
+): QueryFunction {
   // Sequence number for requests.
   let sequenceNumber = 0;
 
@@ -69,6 +73,9 @@ export function initClient(worker: Worker, pollingCycle = 50): QueryFunction {
   return async (query) => {
     // Assign a sequence number to the request.
     const id = sequenceNumber++;
+
+    const pollingCycle =
+      query.pollingCycle == null ? defaultPollingCycle : query.pollingCycle;
 
     const request = {
       id,
